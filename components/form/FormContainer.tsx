@@ -6,12 +6,11 @@ const initialState = {
 
 import { actionFunction } from '@/utils/types'
 import React, { useEffect } from 'react'
-import { useFormState } from 'react-dom'
-import { useToast } from '../ui/use-toast'
+import { useToast } from '@/hooks/use-toast';
 
 
 function FormContainer({action, children}: {action:actionFunction,children:React.ReactNode}) {
-    const [state , formAction] =useFormState(action , initialState)
+    const [state , formAction] =React.useActionState(action , initialState)
     const {toast} = useToast()
     useEffect(()=> {
         if(state.message) {
