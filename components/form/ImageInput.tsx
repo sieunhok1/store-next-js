@@ -4,7 +4,7 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 
 function ImageInput() {
-    const name = 'Image'
+    const name = 'image'
   return (
     <div className='mb-2'>
       <Label htmlFor={name} className='capitalize'>{name}</Label>
@@ -14,3 +14,5 @@ function ImageInput() {
 }
 
 export default ImageInput 
+
+

@@ -7,9 +7,29 @@ export const productSchema = z.object({
     description:z.string().refine((description) => {
         const wordCount = description.split(' ').length
         return wordCount >=10 && wordCount <= 100
-    },{message:'description must be between 10 and 1000 words.'}),
+    },{message:'description must be between 10 and 100 words.'}),
     featured:z.coerce.boolean()
 })
+
+export const imageSchema = z.object({
+  image: validateImageFile(),
+});
+
+function validateImageFile() {
+  const maxUploadSize = 1024 * 1024;
+  const acceptedFileTypes = ['image/'];
+  return z
+  .instanceof(File)
+  .refine(
+    (file) => !file || file.size <= maxUploadSize,
+    { message: 'File size must be less than 1 MB' }
+  )
+  .refine(
+    (file) => !file || acceptedFileTypes.some((type) => file.type.startsWith(type)),
+    { message: 'File must be an image' }
+  );
+
+}
 
 export function validateWithZodSchema<T>(schema:ZodSchema<T> , data:unknown):T{
     const result = schema.safeParse(data);
@@ -19,3 +39,7 @@ export function validateWithZodSchema<T>(schema:ZodSchema<T> , data:unknown):T{
     }
     return result.data
 }
+
+
+  
+  
