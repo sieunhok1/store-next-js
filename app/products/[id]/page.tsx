@@ -6,6 +6,9 @@ import BreadCrumbs from "@/components/single-product/BreadCrumbs";
 import FavoriteToggleButton from "@/components/products/FavoriteToggleButton";
 import ProductRating from "@/components/single-product/ProductRating";
 import AddToCart from "@/components/single-product/AddToCart";
+import ShareButton from "@/components/single-product/ShareButton";
+import ProductReviews from "@/components/reviews/ProductReviews";
+import SubmitReview from "@/components/reviews/SubmitReview";
 
 async function SingleProductPage({ params }: { params: { id: string } }) {
   const product = await fetchSingerProduct(params.id);
@@ -29,7 +32,10 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
         <div>
           <div className="flex gap-x-8 items-center">
             <h1 className="text-xl capitalize">{name}</h1>
+            <div className="flex gap-x-2">
             <FavoriteToggleButton productId={params.id} />
+            <ShareButton productId={params.id} name={product.name}/>
+            </div>
           </div>
           <ProductRating productId={params.id} />
           <h4 className="text-xl mt-2">{company}</h4>
@@ -40,6 +46,10 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
           <AddToCart productId={params.id} />
         </div>
       </div>
+      <>
+        <ProductReviews productId={params.id} />
+        <SubmitReview productId={params.id} />
+      </>
     </section>
   );
 }
