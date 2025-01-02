@@ -1,4 +1,4 @@
-import { fetchSingerProduct } from "@/utils/actions";
+import { fetchSingerProduct, findExistingReview } from "@/utils/actions";
 import { formatCurrency } from "@/utils/format";
 import Image from "next/image";
 import React from "react";
@@ -9,11 +9,14 @@ import AddToCart from "@/components/single-product/AddToCart";
 import ShareButton from "@/components/single-product/ShareButton";
 import ProductReviews from "@/components/reviews/ProductReviews";
 import SubmitReview from "@/components/reviews/SubmitReview";
+import { auth } from "@clerk/nextjs/server";
 
 async function SingleProductPage({ params }: { params: { id: string } }) {
   const product = await fetchSingerProduct(params.id);
   const { name, image, price, description, company } = product;
   const dollarsAmount = formatCurrency(price);
+  const {userId} = auth()
+  const reviewDoesNotExit = userId && !(await findExistingReview(userId , product.id))
   return (
     <section>
       <BreadCrumbs name={name} />
@@ -48,7 +51,8 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
       </div>
       <>
         <ProductReviews productId={params.id} />
-        <SubmitReview productId={params.id} />
+        {reviewDoesNotExit && <SubmitReview productId={params.id} />}
+        
       </>
     </section>
   );
